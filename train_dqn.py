@@ -338,6 +338,9 @@ class SuccessRateEvalCallback(EvalCallback):
 
     EvalCallback tiêu chuẩn chỉ lưu model khi mean_reward cao hơn, nhưng với
     UAV env reward rất nhiễu (vị trí random), success rate ổn định hơn.
+
+    Sử dụng evaluate_policy của SB3 với return_episode_rewards=True để lấy
+    episode_rewards và episode_lengths, sau đó đọc is_success từ info trực tiếp.
     """
 
     def __init__(self, *args, **kwargs):
@@ -345,16 +348,12 @@ class SuccessRateEvalCallback(EvalCallback):
         self.best_success_rate = -1.0
 
     def _on_step(self) -> bool:
-        # Gọi _on_step của EvalCallback gốc để tính reward
+        # Gọi _on_step của EvalCallback gốc (tính mean_reward, render, v.v.)
         result = super()._on_step()
 
-        # Đọc success rate từ episode info của eval env
+        # Chỉ đánh giá success rate tại các bước eval định kỳ
         if self.eval_freq > 0 and self.n_calls % self.eval_freq == 0:
-            # evaluate_policy với return_episode_rewards để lấy info
-            _, _, episode_infos = self._evaluate_with_info()
-            successes = [inf.get("is_success", False) for inf in episode_infos]
-            sr = sum(successes) / len(successes) if successes else 0.0
-
+            sr = self._compute_success_rate()
             print(f"[EvalCallback] Eval SR: {sr:.1%} (best: {self.best_success_rate:.1%})")
 
             if sr > self.best_success_rate:
@@ -365,31 +364,35 @@ class SuccessRateEvalCallback(EvalCallback):
 
         return result
 
-    def _evaluate_with_info(self):
-        """Chạy N_EVAL_EPISODES và thu thập infos cuối mỗi episode."""
-        all_rewards, all_lengths, all_infos = [], [], []
-        obs, _ = self.eval_env.reset()
-        ep_reward, ep_length = 0.0, 0
+    def _compute_success_rate(self) -> float:
+        """
+        Chạy N_EVAL_EPISODES trên eval_env (VecEnv) và tính success rate.
+        Dùng API VecEnv chuẩn:
+          - reset() → obs (numpy array shape (n_envs, obs_dim))
+          - step()  → (obs, rewards, dones, infos) — 4-tuple
+        """
+        n_success = 0
+        n_episodes = 0
 
-        for _ in range(N_EVAL_EPISODES):
-            done = False
-            last_info = {}
-            ep_reward, ep_length = 0.0, 0
-            obs, _ = self.eval_env.reset()
+        # VecEnv reset trả về obs trực tiếp (không có info)
+        obs = self.eval_env.reset()
 
-            while not done:
-                action, _ = self.model.predict(obs, deterministic=True)
-                obs, reward, terminated, truncated, info = self.eval_env.step(action)
-                ep_reward += reward
-                ep_length += 1
-                done = terminated or truncated
-                last_info = info
+        ep_count = 0
+        while ep_count < N_EVAL_EPISODES:
+            action, _ = self.model.predict(obs, deterministic=True)
+            # VecEnv step → 4-tuple (obs, rewards, dones, infos)
+            obs, rewards, dones, infos = self.eval_env.step(action)
 
-            all_rewards.append(ep_reward)
-            all_lengths.append(ep_length)
-            all_infos.append(last_info)
+            for done, info in zip(dones, infos):
+                if done:
+                    ep_count += 1
+                    # SB3 VecEnv đưa terminal info vào key "terminal_observation"
+                    # outcome nằm trong info gốc của env
+                    outcome = info.get("outcome", "timeout")
+                    if outcome == "success" or info.get("is_success", False):
+                        n_success += 1
 
-        return all_rewards, all_lengths, all_infos
+        return n_success / N_EVAL_EPISODES if N_EVAL_EPISODES > 0 else 0.0
 
 
 # ───────────────────────────────────────────────────────────────
