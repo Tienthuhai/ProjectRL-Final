@@ -35,7 +35,7 @@ from uav_env.uav_map_env import UAVMapEnv
 # Cấu hình chung
 # ───────────────────────────────────────────────────────────────
 SEED = 42
-MAX_TIMESTEPS = 350_000
+MAX_TIMESTEPS = 400_000
 
 TRAIN_MAPS = [
     "maps/map_easy.png",
