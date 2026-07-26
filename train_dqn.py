@@ -61,18 +61,18 @@ LOG_CSV  = os.path.join(LOG_DIR, "train_log.csv")
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "dqn_best")
 FINAL_MODEL_PATH = os.path.join(MODEL_DIR, "dqn_final")
 
-# Hyperparameters (yêu cầu đề bài)
+# Hyperparameters tối ưu cho UAV Path Planning
 HYPERPARAMS = dict(
-    learning_rate=1e-4,
+    learning_rate=3e-4,
     buffer_size=100_000,
-    learning_starts=5_000,
-    batch_size=64,
+    learning_starts=2_000,
+    batch_size=128,
     gamma=0.99,
     train_freq=4,
-    target_update_interval=1_000,
-    exploration_fraction=0.3,
+    target_update_interval=500,
+    exploration_fraction=0.25,
     exploration_initial_eps=1.0,
-    exploration_final_eps=0.05,
+    exploration_final_eps=0.02,
     max_grad_norm=10,
     policy_kwargs=dict(net_arch=[256, 256]),
 )
@@ -413,10 +413,10 @@ def main():
 
     # ── Khởi tạo môi trường ──────────────────────────────────────
     print(f"\n[Setup] Khởi tạo training env: {TRAIN_MAPS[0]}")
-    train_env = make_env(TRAIN_MAPS[0], fixed_start_goal=False, seed=SEED)
+    train_env = make_env(TRAIN_MAPS[0], fixed_start_goal=True, seed=SEED)
 
     print(f"[Setup] Khởi tạo eval env: {EVAL_MAP}")
-    eval_env = make_env(EVAL_MAP, fixed_start_goal=False, seed=SEED + 1)
+    eval_env = make_env(EVAL_MAP, fixed_start_goal=True, seed=SEED + 1)
 
     # ── Khởi tạo model DQN ──────────────────────────────────────
     print("\n[Setup] Khởi tạo DQN model...")

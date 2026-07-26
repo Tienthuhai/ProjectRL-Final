@@ -25,12 +25,16 @@ class UAVMapEnv(gym.Env):
     ACTION_TURN_RIGHT_HEAVY = 4
 
     DEFAULT_MAP_CONFIGS = {
-        "maps/map_easy.png": {"start": (50.0, 50.0), "goal": (450.0, 450.0)},
-        "maps/map_medium.png": {"start": (50.0, 250.0), "goal": (450.0, 250.0)},
-        "maps/map_hard.png": {"start": (50.0, 50.0), "goal": (450.0, 450.0)},
-        "maps/map_heldout.png": {"start": (50.0, 50.0), "goal": (450.0, 450.0)},
-        "maps/map_urban.png": {"start": (50.0, 50.0), "goal": (450.0, 450.0)},
-        "maps/map_dense.png": {"start": (50.0, 50.0), "goal": (450.0, 450.0)},
+        # map_easy (cũ: map_medium) — 1 hình chữ nhật to chính giữa
+        # Start góc trên trái, Goal góc dưới phải, đường chéo tránh tường
+        "maps/map_easy.png":    {"start": (40.0, 40.0),  "goal": (460.0, 460.0)},
+        # map_medium (cũ: map_hard) — các vòng tròn phân tán
+        "maps/map_medium.png":  {"start": (40.0, 40.0),  "goal": (460.0, 460.0)},
+        # map_hard (cũ: map_easy) — nhiều hình chữ nhật phức tạp
+        "maps/map_hard.png":    {"start": (40.0, 40.0),  "goal": (460.0, 460.0)},
+        "maps/map_heldout.png": {"start": (50.0, 50.0),  "goal": (450.0, 450.0)},
+        "maps/map_urban.png":   {"start": (50.0, 50.0),  "goal": (450.0, 450.0)},
+        "maps/map_dense.png":   {"start": (50.0, 50.0),  "goal": (450.0, 450.0)},
     }
 
     def __init__(self, map_path="maps/map_easy.png", fixed_start_goal=True, render_mode=None, max_steps=500, speed=4.0, max_range=150.0):
@@ -270,13 +274,23 @@ class UAVMapEnv(gym.Env):
             outcome = "success"
             self.last_action_str += " (GOAL REACHED! THẮNG)"
         else:
-            shaping_reward = 1.5 * (prev_dist - current_dist)
+            # 1. Distance shaping reward: thưởng tiến lại gần đích
+            shaping_reward = 2.0 * (prev_dist - current_dist)
             reward += shaping_reward
 
+            # 2. Heading alignment reward: thưởng khi quay đầu về phía đích
+            dx_g = self.goal_pos[0] - new_x
+            dy_g = self.goal_pos[1] - new_y
+            angle_to_g = math.atan2(dy_g, dx_g)
+            rel_a = math.atan2(math.sin(angle_to_g - self.heading), math.cos(angle_to_g - self.heading))
+            reward += 0.2 * math.cos(rel_a)
+
+            # 3. Phạt nguy hiểm khi áp sát vật cản
             if min_lidar < 15.0:
                 reward -= 0.5
 
-            reward -= 0.2
+            # 4. Phạt bước thời gian
+            reward -= 0.1
 
         if self.current_step >= self.max_steps and not terminated:
             truncated = True

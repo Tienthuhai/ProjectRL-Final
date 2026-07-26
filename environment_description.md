@@ -70,9 +70,9 @@ Hàm thưởng được thiết kế dạng **Reward Shaping** để định hư
 
 | Giai đoạn | Tên File Bản Đồ | Độ khó | Đặc điểm chướng ngại vật & Kỹ năng huấn luyện chính |
 | :---: | :--- | :---: | :--- |
-| **Stage 1** | [`maps/map_1.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_1.png) *(map_easy)* | **Dễ** | Vật cản thưa, phân bố đối xứng. Giúp UAV học định hướng đích và duy trì bay thẳng cơ bản. |
-| **Stage 2** | [`maps/map_3.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_3.png) *(map_medium)* | **Trung bình** | Vật cản chắn ngang giữa hành lang. Bắt buộc UAV đưa ra ra quyết định chọn luồng lách (Ngoặt trái/phải). |
-| **Stage 3** | [`maps/map_4.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_4.png) / [`map_5.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_5.png) *(map_hard)* | **Khó** | Hẻm nhỏ + chùm vật cản phức hợp mật độ cao. Huấn luyện phản xạ bay sát tường và né tránh nguy hiểm. |
+| **Stage 1** | [`maps/map_easy.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_easy.png) | **Dễ** | 1 khối chướng ngại vật chữ nhật chính giữa + 4 trụ góc. Giúp UAV dễ dàng học đường bay vòng 2 bên lách tới đích. |
+| **Stage 2** | [`maps/map_medium.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_medium.png) | **Trung bình** | Các trụ tròn phân tán. Bắt buộc UAV đưa ra quyết định chọn luồng lách (Ngoặt trái/phải). |
+| **Stage 3** | [`maps/map_hard.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_hard.png) | **Khó** | Nhiều chướng ngại vật hình chữ nhật phức hợp bố trí so le. Huấn luyện phản xạ bay sát tường và lách khe chật hẹp. |
 
 ---
 
@@ -82,9 +82,9 @@ Các bản đồ này **KHÔNG** dùng trong quá trình huấn luyện, chỉ p
 
 | Tên Bản Đồ | Đặc điểm môi trường | Mục đích kiểm thử |
 | :--- | :--- | :--- |
-| [`maps/map_heldout.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_heldout.png) | **Bản đồ Test Độc Lập**: Thiết kế hoàn toàn mới không trùng lặp với 3 map train. | Đánh giá khả năng Zero-shot Generalization của agent đã học. |
-| [`maps/map_urban.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_urban.png) | **Môi trường Đô thị**: Các khối nhà hình chữ nhật mật độ cao mô phỏng quy hoạch đô thị. | Kiểm thử phản xạ cảm biến LiDAR trong không gian hẹp phức tạp. |
-| [`maps/map_dense.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_dense.png) | **Môi trường Mật độ dày**: Các khoảng trống hẹp giữa chùm vật cản. | Kiểm thử phản xạ áp sát chướng ngại vật khẩn cấp. |
+| [`maps/map_heldout.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_heldout.png) | **Bản đồ Test Độc Lập**: Thiết kế các khe dầm dài không trùng lặp với 3 map train. | Đánh giá khả năng Zero-shot Generalization của agent đã học. |
+| [`maps/map_urban.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_urban.png) | **Môi trường Đô thị**: Các khối nhà hình chữ nhật mô phỏng quy hoạch đô thị. | Kiểm thử phản xạ cảm biến LiDAR trong không gian hẹp phức tạp. |
+| [`maps/map_dense.png`](file:///d:/University%20Course/RL%20N%C3%A2ng%20Cao/project%20RL/maps/map_dense.png) | **Môi trường Mật độ dày**: Các ô lưới chướng ngại vật chật hẹp. | Kiểm thử phản xạ áp sát chướng ngại vật khẩn cấp. |
 
 
 ---
