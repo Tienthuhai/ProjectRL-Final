@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.code-workspace
+
+# Antigravity / AI Agent data
+.agents/
+.gemini/
+
+# Training outputs — KHÔNG đẩy lên GitHub (quá lớn, tự sinh khi chạy)
+logs/
+models/
+results/
+
+# Map preview images (tự sinh khi chạy generate_report_map_images.py)
+map_previews/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# TensorBoard
+runs/
+
+# Numpy / torch save files lẻ
+*.npy
+*.npz
