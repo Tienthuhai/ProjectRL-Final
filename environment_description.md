@@ -12,17 +12,17 @@ Môi trường `UAVMapEnv` là môi trường giả lập chuẩn **Gymnasium 2D
 * **Kích thước bản đồ tiêu chuẩn**: $500 \times 500$ pixels.
 * **Tốc độ bay (Speed)**: $4.0$ pixels/step.
 * **Tầm quét cảm biến LiDAR**: $150.0$ pixels (16 hướng quét $360^\circ$).
-* **Số bước tối đa (Max Steps)**: $500$ steps/episode.
+* **Số bước tối đa (Max Steps)**: $700$ steps/episode.
 
 ---
 
-## 2. 🧠 Không Gian Trạng Thái (Observation Space - 22D Vector)
+## 2. 🧠 Không Gian Trạng Thái (Observation Space - 30D Vector)
 
-Observation là một véc-tơ liên tục **22 chiều (22D Box Vector)** trong khoảng $[-1.0, 1.0]$, giải quyết triệt để lỗi gián đoạn góc nghiêng bằng biểu diễn lượng giác ($\sin/\cos$):
+Observation là một véc-tơ liên tục **30 chiều (30D Box Vector)** trong khoảng $[-1.0, 1.0]$, giải quyết triệt để lỗi gián đoạn góc nghiêng bằng biểu diễn lượng giác ($\sin/\cos$):
 
 | STT | Chiều dữ liệu | Kích thước | Khoảng giá trị | Mô tả |
 | :---: | :--- | :---: | :---: | :--- |
-| **1** | `lidar_distances` | 16D | $[0.0, 1.0]$ | Khoảng cách từ UAV tới vật cản theo 16 tia LiDAR quét quanh góc $360^\circ$ (chuẩn hóa theo `max_range = 150px`). |
+| **1** | `lidar_distances` | 24D | $[0.0, 1.0]$ | Khoảng cách từ UAV tới vật cản theo 24 tia LiDAR quét quanh góc $360^\circ$ (chuẩn hóa theo `max_range = 150px`). |
 | **2** | `target_dist` | 1D | $[0.0, 1.0]$ | Khoảng cách từ vị trí hiện tại của UAV tới điểm đích Goal (chuẩn hóa theo đường chéo bản đồ). |
 | **3** | `sin(target_angle)` | 1D | $[-1.0, 1.0]$ | Sin của góc lệch tương đối giữa hướng bay hiện tại và hướng tới Goal. |
 | **4** | `cos(target_angle)` | 1D | $[-1.0, 1.0]$ | Cos của góc lệch tương đối giữa hướng bay hiện tại và hướng tới Goal. |

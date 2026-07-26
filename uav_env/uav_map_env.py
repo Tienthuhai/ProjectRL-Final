@@ -37,7 +37,7 @@ class UAVMapEnv(gym.Env):
         "maps/map_dense.png":   {"start": (50.0, 50.0),  "goal": (450.0, 450.0)},
     }
 
-    def __init__(self, map_path="maps/map_easy.png", fixed_start_goal=True, render_mode=None, max_steps=500, speed=4.0, max_range=150.0):
+    def __init__(self, map_path="maps/map_easy.png", fixed_start_goal=True, render_mode=None, max_steps=700, speed=4.0, max_range=150.0):
         super().__init__()
         self.map_path = map_path
         self.fixed_start_goal = fixed_start_goal
@@ -45,15 +45,15 @@ class UAVMapEnv(gym.Env):
         self.max_steps = max_steps
         self.speed = speed
         self.max_range = max_range
-        self.num_lidar_rays = 16
+        self.num_lidar_rays = 24
 
         # Nạp ảnh bản đồ
         self._load_map(map_path)
 
-        # Action Space & Observation Space (22D Box Vector)
+        # Action Space & Observation Space (30D Box Vector: 24D LiDAR + 6D Spatial Cues)
         self.action_space = spaces.Discrete(5)
         self.observation_space = spaces.Box(
-            low=-1.0, high=1.0, shape=(22,), dtype=np.float32
+            low=-1.0, high=1.0, shape=(30,), dtype=np.float32
         )
 
         # Trạng thái nội tại

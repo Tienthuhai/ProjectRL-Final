@@ -62,12 +62,12 @@ LOG_CSV     = os.path.join(RESULTS_DIR, "train_log.csv")
 BEST_MODEL_PATH  = os.path.join(MODEL_DIR, "dqn_best")
 FINAL_MODEL_PATH = os.path.join(MODEL_DIR, "dqn_final")
 
-# Hyperparameters nâng cao cho UAV Path Planning (DQN)
+# Hyperparameters cấp cao nhất cho UAV Path Planning (DQN)
 HYPERPARAMS = dict(
     learning_rate=3e-4,
-    buffer_size=200_000,
+    buffer_size=300_000,
     learning_starts=2_000,
-    batch_size=128,
+    batch_size=256,
     gamma=0.99,
     train_freq=4,
     target_update_interval=500,
@@ -75,7 +75,7 @@ HYPERPARAMS = dict(
     exploration_initial_eps=1.0,
     exploration_final_eps=0.02,
     max_grad_norm=10,
-    policy_kwargs=dict(net_arch=[256, 256, 256]),  # Mạng 3 lớp 256 tăng khả năng học phi tuyến
+    policy_kwargs=dict(net_arch=[512, 512]),  # Mạng rộng 512-512 tăng sức chứa tri thức né vật cản
 )
 
 
