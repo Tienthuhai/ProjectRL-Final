@@ -34,7 +34,10 @@ except ImportError:
     print("[Warning] stable-baselines3 không tìm thấy. Sẽ chạy agent random.")
 
 # ── Cấu hình ──────────────────────────────────────────────────
-DEFAULT_MODEL = "models/dqn_best.zip"
+DEFAULT_MODEL = "results/models/dqn_best.zip"
+if not os.path.exists(DEFAULT_MODEL) and os.path.exists("models/dqn_best.zip"):
+    DEFAULT_MODEL = "models/dqn_best.zip"
+
 VIDEO_DIR     = "results/videos"
 FPS           = 30
 N_EPISODES    = 3          # Số episode quay cho mỗi map

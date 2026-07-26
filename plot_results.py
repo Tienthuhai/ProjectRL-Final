@@ -18,7 +18,7 @@ import matplotlib.ticker as mticker
 from matplotlib.patches import Patch
 
 # ── Cấu hình ──────────────────────────────────────────────────
-LOG_CSV   = "logs/train_log.csv"
+LOG_CSV   = "results/train_log.csv"
 CHART_DIR = "results/charts"
 os.makedirs(CHART_DIR, exist_ok=True)
 
@@ -41,11 +41,14 @@ DPI         = 150
 
 def load_data() -> pd.DataFrame:
     """Nạp CSV và kiểm tra dữ liệu cơ bản."""
-    if not os.path.exists(LOG_CSV):
+    csv_path = LOG_CSV
+    if not os.path.exists(csv_path) and os.path.exists("logs/train_log.csv"):
+        csv_path = "logs/train_log.csv"
+    if not os.path.exists(csv_path):
         raise FileNotFoundError(
-            f"Không tìm thấy '{LOG_CSV}'. Hãy chạy train_dqn.py trước."
+            f"Không tìm thấy '{LOG_CSV}' hoặc 'logs/train_log.csv'. Hãy chạy train_dqn.py trước."
         )
-    df = pd.read_csv(LOG_CSV)
+    df = pd.read_csv(csv_path)
     required = {"episode", "timestep", "total_reward", "episode_length",
                 "outcome", "current_map_stage", "rolling_success_rate_200"}
     missing = required - set(df.columns)

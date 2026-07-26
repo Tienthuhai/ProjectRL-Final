@@ -55,10 +55,11 @@ EARLY_STOP_PATIENCE = 500        # số episode liên tiếp không cải thiệ
 EVAL_FREQ = 5_000                # timesteps giữa các lần eval
 N_EVAL_EPISODES = 20
 
-LOG_DIR  = "logs"
-MODEL_DIR = "models"
-LOG_CSV  = os.path.join(LOG_DIR, "train_log.csv")
-BEST_MODEL_PATH = os.path.join(MODEL_DIR, "dqn_best")
+RESULTS_DIR = "results"
+LOG_DIR     = os.path.join(RESULTS_DIR, "logs")
+MODEL_DIR   = os.path.join(RESULTS_DIR, "models")
+LOG_CSV     = os.path.join(RESULTS_DIR, "train_log.csv")
+BEST_MODEL_PATH  = os.path.join(MODEL_DIR, "dqn_best")
 FINAL_MODEL_PATH = os.path.join(MODEL_DIR, "dqn_final")
 
 # Hyperparameters tối ưu cho UAV Path Planning
