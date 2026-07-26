@@ -106,7 +106,7 @@ def plot_reward(df: pd.DataFrame):
     handles, labels = ax.get_legend_handles_labels()
     labels_clean = [l for l in labels if not l.startswith("_")]
     handles_clean = [h for h, l in zip(handles, labels) if not l.startswith("_")]
-    ax.legend(handles_clean + stage_patches, labels_clean + [s.label for s in stage_patches],
+    ax.legend(handles_clean + stage_patches, labels_clean + [s.get_label() for s in stage_patches],
               fontsize=FONT_TICK, loc="upper left")
 
     ax.set_title("(a) Tổng Reward theo Episode", fontsize=FONT_TITLE, fontweight="bold")
@@ -157,7 +157,7 @@ def plot_rolling_success_rate(df: pd.DataFrame):
                      for i in range(min(3, len(stage_changes)))]
 
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles + stage_patches, labels + [s.label for s in stage_patches],
+    ax.legend(handles + stage_patches, labels + [s.get_label() for s in stage_patches],
               fontsize=FONT_TICK, loc="lower right")
 
     ax.set_title("(e) Rolling Success Rate theo Episode (cửa sổ 200 episode)",
@@ -198,6 +198,7 @@ def plot_outcome_distribution(df: pd.DataFrame):
     ax.set_title("(g) Phân Bố Kết Quả — Toàn Bộ Training",
                  fontsize=FONT_TITLE - 1, fontweight="bold")
     ax.set_ylabel("Số Episode", fontsize=FONT_LABEL)
+    ax.set_xticks(range(len(labels)))
     ax.set_xticklabels(["Success\n(Đến đích)", "Collision\n(Va chạm)", "Timeout\n(Hết bước)"],
                        fontsize=FONT_TICK)
     ax.grid(axis="y", alpha=0.3)
@@ -265,7 +266,7 @@ def plot_episode_length(df: pd.DataFrame):
     stage_patches = [Patch(facecolor=STAGE_COLORS[i], alpha=0.3, label=STAGE_LABELS[i])
                      for i in range(min(3, len(stage_changes)))]
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles + stage_patches, labels + [s.label for s in stage_patches],
+    ax.legend(handles + stage_patches, labels + [s.get_label() for s in stage_patches],
               fontsize=FONT_TICK)
 
     ax.set_title("(x) Episode Length theo Episode", fontsize=FONT_TITLE, fontweight="bold")
