@@ -77,7 +77,16 @@ def record_map(map_path: str, map_name: str, map_title: str,
     """
     os.makedirs(os.path.dirname(video_path), exist_ok=True)
 
-    # Khởi tạo env ở chế độ rgb_array (không mở cửa sổ Pygame)
+    # Phải init pygame TRƯỜC khi tạo env vì env.render() gọi pygame.font bên trong
+    if not pygame.get_init():
+        pygame.init()
+    if not pygame.font.get_init():
+        pygame.font.init()
+    # Cần display surface (dù dummy) để SysFont hoạt động dưới render_mode=rgb_array
+    if pygame.display.get_surface() is None:
+        pygame.display.set_mode((1, 1), pygame.NOFRAME)
+
+    # Khởi tạo env ở chế độ rgb_array (không mở cửa sổ Pygame thật)
     env = UAVMapEnv(
         map_path=map_path,
         fixed_start_goal=True,
@@ -99,11 +108,6 @@ def record_map(map_path: str, map_name: str, map_title: str,
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     writer = cv2.VideoWriter(video_path, fourcc, FPS, (w, h))
 
-    # Khởi pygame fonts (không cần display)
-    if not pygame.get_init():
-        pygame.init()
-    if not pygame.font.get_init():
-        pygame.font.init()
     font_title = pygame.font.SysFont("Arial", 13, bold=True)
     font_info  = pygame.font.SysFont("Arial", 11)
 
