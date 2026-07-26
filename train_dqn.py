@@ -35,7 +35,7 @@ from uav_env.uav_map_env import UAVMapEnv
 # Cấu hình chung
 # ───────────────────────────────────────────────────────────────
 SEED = 42
-MAX_TIMESTEPS = 300_000
+MAX_TIMESTEPS = 350_000
 
 TRAIN_MAPS = [
     "maps/map_easy.png",
@@ -45,7 +45,7 @@ TRAIN_MAPS = [
 EVAL_MAP = "maps/map_easy.png"   # eval trên map dễ để ổn định benchmark
 
 CURRICULUM_WINDOW = 200          # cửa sổ rolling để đánh giá chuyển stage
-CURRICULUM_THRESHOLD = 0.70      # success rate để chuyển stage
+CURRICULUM_THRESHOLD = 0.75      # success rate để chuyển stage
 
 EARLY_STOP_WINDOW = 200
 EARLY_STOP_THRESHOLD = 0.85      # success rate tối thiểu để xét early stop
@@ -62,20 +62,20 @@ LOG_CSV     = os.path.join(RESULTS_DIR, "train_log.csv")
 BEST_MODEL_PATH  = os.path.join(MODEL_DIR, "dqn_best")
 FINAL_MODEL_PATH = os.path.join(MODEL_DIR, "dqn_final")
 
-# Hyperparameters tối ưu cho UAV Path Planning
+# Hyperparameters nâng cao cho UAV Path Planning (DQN)
 HYPERPARAMS = dict(
     learning_rate=3e-4,
-    buffer_size=100_000,
+    buffer_size=200_000,
     learning_starts=2_000,
     batch_size=128,
     gamma=0.99,
     train_freq=4,
     target_update_interval=500,
-    exploration_fraction=0.25,
+    exploration_fraction=0.35,
     exploration_initial_eps=1.0,
     exploration_final_eps=0.02,
     max_grad_norm=10,
-    policy_kwargs=dict(net_arch=[256, 256]),
+    policy_kwargs=dict(net_arch=[256, 256, 256]),  # Mạng 3 lớp 256 tăng khả năng học phi tuyến
 )
 
 

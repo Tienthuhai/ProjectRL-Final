@@ -40,7 +40,7 @@ if not os.path.exists(DEFAULT_MODEL) and os.path.exists("models/dqn_best.zip"):
 
 VIDEO_DIR     = "results/videos"
 FPS           = 30
-N_EPISODES    = 3          # Số episode quay cho mỗi map
+N_EPISODES    = 5          # Số episode quay cho mỗi map
 
 ALL_MAPS = [
     ("maps/map_easy.png",    "map_easy",    "Train Stage 1 (Easy)"),

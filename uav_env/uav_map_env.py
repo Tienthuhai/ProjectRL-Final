@@ -264,32 +264,34 @@ class UAVMapEnv(gym.Env):
         min_lidar = np.min(self.lidar_distances)
         outcome = "in_progress"
         if min_lidar <= 2.0 or not self._is_free(new_x, new_y, margin=3) or new_x <= 5.0 or new_x >= self.map_w - 5.0 or new_y <= 5.0 or new_y >= self.map_h - 5.0:
-            reward = -100.0
+            reward = -250.0
             terminated = True
             outcome = "collision"
             self.last_action_str += " (COLLISION! THẤT BẠI)"
         elif current_dist <= 20.0:
-            reward = +300.0
+            reward = +500.0
             terminated = True
             outcome = "success"
             self.last_action_str += " (GOAL REACHED! THẮNG)"
         else:
-            # 1. Distance shaping reward: thưởng tiến lại gần đích
-            shaping_reward = 2.0 * (prev_dist - current_dist)
+            # 1. Distance shaping reward
+            shaping_reward = 1.2 * (prev_dist - current_dist)
             reward += shaping_reward
 
-            # 2. Heading alignment reward: thưởng khi quay đầu về phía đích
+            # 2. Heading alignment reward: thưởng khi hướng về phía đích
             dx_g = self.goal_pos[0] - new_x
             dy_g = self.goal_pos[1] - new_y
             angle_to_g = math.atan2(dy_g, dx_g)
             rel_a = math.atan2(math.sin(angle_to_g - self.heading), math.cos(angle_to_g - self.heading))
-            reward += 0.2 * math.cos(rel_a)
+            reward += 0.3 * math.cos(rel_a)
 
-            # 3. Phạt nguy hiểm khi áp sát vật cản
-            if min_lidar < 15.0:
-                reward -= 0.5
+            # 3. Phạt nguy hiểm lũy thừa khi áp sát vật cản (LiDAR < 30px)
+            # Ép Q-value của hành động tiến thẳng đâm vật cản thấp hơn hành động ngoặt lách
+            if min_lidar < 30.0:
+                proximity_penalty = 3.5 * ((30.0 - min_lidar) / 30.0) ** 2
+                reward -= proximity_penalty
 
-            # 4. Phạt bước thời gian
+            # 4. Phạt bước thời gian nhẹ
             reward -= 0.1
 
         if self.current_step >= self.max_steps and not terminated:
