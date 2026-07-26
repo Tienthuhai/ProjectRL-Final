@@ -55,3 +55,8 @@ runs/
 # Numpy / torch save files lẻ
 *.npy
 *.npz
+
+results_a2c/
+results_ddqn/
+results_ppo/
+results/

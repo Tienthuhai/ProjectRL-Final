@@ -52,8 +52,10 @@ class UAVMapEnv(gym.Env):
 
         # Action Space & Observation Space (30D Box Vector: 24D LiDAR + 6D Spatial Cues)
         self.action_space = spaces.Discrete(5)
+        obs_low  = np.array([0.0]*24 + [0.0] + [-1.0,-1.0] + [-1.0,-1.0] + [0.0], dtype=np.float32)
+        obs_high = np.array([1.0]*24 + [1.0] + [ 1.0, 1.0] + [ 1.0, 1.0] + [1.0], dtype=np.float32)
         self.observation_space = spaces.Box(
-            low=-1.0, high=1.0, shape=(30,), dtype=np.float32
+            low=obs_low, high=obs_high, dtype=np.float32
         )
 
         # Trạng thái nội tại
